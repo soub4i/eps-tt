@@ -1,0 +1,22 @@
+- name: Install Trivy on Jenkins Server
+  hosts: jenkins_server # Assuming "jenkins_server" is in your inventory file
+  become: true # Run tasks with root privileges
+  tasks:
+    - name: Add GPG key for Trivy repository
+      apt_key:
+        url: https://aquasecurity.github.io/trivy-repo/deb/public.key
+        state: present
+
+    - name: Add Trivy repository
+      apt_repository:
+        repo: deb https://aquasecurity.github.io/trivy-repo/deb stable main
+        state: present
+
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install Trivy
+      apt:
+        name: trivy
+        state: present
